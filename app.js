@@ -133,6 +133,15 @@ router.post('/create/board', (req, res) => {
         res.json({status : false});
     }
 });
+
+// 내가 올린 글
+router.post('/myboard', (req, res) => {
+    console.log('/myboard 호출');
+
+    const paramId = req.params('id');
+    res.json(database.BoardModel.find({id : paramId}, {_id : false}));
+});
+
 // 내가 올린 글 수정
 router.post('/update/board', (req, res) => {
     console.log('/update/board 호출');
@@ -155,6 +164,8 @@ router.post('/update/board', (req, res) => {
     console.log('수정 완료');
 })
 
+let findData;
+
 // 메인화면 검색
 router.post('/main/search', (req, res) => {
     console.log('/main/search 호출');
@@ -166,13 +177,22 @@ router.post('/main/search', (req, res) => {
 
     console.log(`찾는 정보 => ${paramLocation}, ${paramPeriod}, ${paramCost}, ${paramRoomtype}`);
 
+    findData = database.BoardModel.find({location : paramLocation}, {period : paramPeriod}, {coost : paramCost}, {roomType : paramRoomtype},{_id:false});
     
-
+    
 });
 
-// 메인화면 리스트
+// 리스트
+router.post('/main/list', (req, res) => {
+    console.log('main/list 호출');
+    res.json(findData);
+});
 
 // 방 상세화면
+router.post('/main/detail', (req, res) => {
+    console.log('/main/detail 호출');
+    res.json(findData);
+});
 
 
 
